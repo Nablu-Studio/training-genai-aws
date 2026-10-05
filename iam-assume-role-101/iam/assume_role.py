@@ -30,6 +30,7 @@ def explain_aws_error(exc: ClientError) -> str:
     hint = AWS_ERROR_HINTS.get(code, "Unexpected AWS error: read details below.")
     return f"[{code}] {hint}\nAWS Details: {error.get('Message', '')}"
 
+
 ROLE_ARN = os.environ.get(
     "TRAINING_ASSUME_ROLE_ARN",
     "arn:aws:iam::123456789012:role/nablu-training-assume-role",
