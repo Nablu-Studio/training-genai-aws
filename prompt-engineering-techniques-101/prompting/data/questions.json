@@ -1,0 +1,10 @@
+[
+  { "id": "q1", "question": "Quelle est la capitale de la France ?", "golden": "Paris" },
+  { "id": "q2", "question": "Quel service AWS heberge les foundation models ?", "golden": "Amazon Bedrock" },
+  { "id": "q3", "question": "Cite une base vectorielle AWS low cost.", "golden": "S3 Vectors" },
+  { "id": "q4", "question": "Qu est-ce qu un guardrail Bedrock ?", "golden": "Un controle qui filtre ou refuse les prompts et reponses indesirables" },
+  { "id": "q5", "question": "Quel mecanisme gere la personnalisation d un FM ?", "golden": "Un job de fine-tuning, continued pre-training, ou custom model import" },
+  { "id": "q6", "question": "Quelle est la difference entre on-demand et Provisioned Throughput ?", "golden": "On-demand est a la requete, Provisioned Throughput est un engagement mensuel" },
+  { "id": "q7", "question": "Quel mecanisme capture les traces LLM ?", "golden": "Une pipeline d observabilite avec CloudWatch et redaction des secrets" },
+  { "id": "q8", "question": "Comment evaluer un LLM en production ?", "golden": "Avec un dataset de golden answers et des metriques automatisees" }
+]

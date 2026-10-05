@@ -1,0 +1,6 @@
+{
+  "cacheTtlDays": 7,
+  "reindexFrequency": "weekly",
+  "staleAfterDays": 30,
+  "fallbackWhenStale": "no_answer"
+}

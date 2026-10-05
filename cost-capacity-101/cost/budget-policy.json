@@ -1,0 +1,7 @@
+{
+  "monthlyLimitUsd": 1000,
+  "driftAlertRatio": 0.2,
+  "maxTokens": 500,
+  "maxTopK": 8,
+  "fallbackModelTier": "cheap"
+}

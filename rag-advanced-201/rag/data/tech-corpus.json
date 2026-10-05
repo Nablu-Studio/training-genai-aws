@@ -1,0 +1,18 @@
+[
+  {
+    "id": "chunk-1",
+    "content": "Le re-ranking Bedrock utilise un modele dedie (Cohere Rerank v3) qui prend une liste de passages et un query, et retourne la liste reordonnee avec un score de pertinence. Le re-ranking est utile pour ameliorer le topK d un systeme RAG vectoriel."
+  },
+  {
+    "id": "chunk-2",
+    "content": "GraphRAG extrait des triplets (entite, relation, entite) a partir des chunks, puis les stocke dans une base graphe. Au moment de la requete, les triplets pertinents sont injectes dans le prompt ancre pour fournir du contexte relationnel."
+  },
+  {
+    "id": "chunk-3",
+    "content": "Titan Multimodal Embeddings G1 produit un vecteur 1024 dim qui couvre texte et image. OpenSearch Service accepte les champs image en plus des champs embedding pour un RAG multi-modal."
+  },
+  {
+    "id": "chunk-4",
+    "content": "Le pattern multi-modal RAG combine : embed image (Titan), retrieval par similarite, prompt multi-modal (texte + image en base64), reponse par un modele multi-modal (Nova Lite, Claude 3)."
+  }
+]

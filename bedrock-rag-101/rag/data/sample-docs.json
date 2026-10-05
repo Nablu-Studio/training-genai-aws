@@ -1,0 +1,26 @@
+[
+  {
+    "id": "doc-1",
+    "title": "Amazon Bedrock overview",
+    "content": "Amazon Bedrock est un service manage AWS pour utiliser des foundation models via API.",
+    "source": "aws-docs"
+  },
+  {
+    "id": "doc-2",
+    "title": "RAG basics",
+    "content": "Le retrieval apporte du contexte externe avant la generation afin de reduire les hallucinations.",
+    "source": "training-notes"
+  },
+  {
+    "id": "doc-3",
+    "title": "Bedrock regions",
+    "content": "La disponibilite des modeles Bedrock varie selon la region AWS et l'acces IAM accorde au compte.",
+    "source": "ops-guide"
+  },
+  {
+    "id": "doc-4",
+    "title": "Fallback policy",
+    "content": "Quand le corpus est trop pauvre ou que les sources sont hors perimetre, le systeme doit preferer une reponse prudente plutot qu'une invention.",
+    "source": "governance-notes"
+  }
+]

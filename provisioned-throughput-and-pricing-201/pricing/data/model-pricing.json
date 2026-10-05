@@ -1,0 +1,29 @@
+[
+  {
+    "modelId": "amazon.nova-lite-v1:0",
+    "vendor": "Amazon",
+    "muCapacityTokensPerMin": 30000,
+    "ptPricePerMuHour": 1.50,
+    "onDemandInputPer1k": 0.00006,
+    "onDemandOutputPer1k": 0.00024,
+    "batchDiscount": 0.5
+  },
+  {
+    "modelId": "anthropic.claude-3-sonnet-20240229-v1:0",
+    "vendor": "Anthropic",
+    "muCapacityTokensPerMin": 20000,
+    "ptPricePerMuHour": 7.50,
+    "onDemandInputPer1k": 0.003,
+    "onDemandOutputPer1k": 0.015,
+    "batchDiscount": 0.5
+  },
+  {
+    "modelId": "anthropic.claude-3-haiku-20240307-v1:0",
+    "vendor": "Anthropic",
+    "muCapacityTokensPerMin": 40000,
+    "ptPricePerMuHour": 1.80,
+    "onDemandInputPer1k": 0.00025,
+    "onDemandOutputPer1k": 0.00125,
+    "batchDiscount": 0.5
+  }
+]

@@ -1,0 +1,27 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS & Editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Output & Audits generated at runtime
+*/audit/
+audit/
+*.log

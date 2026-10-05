@@ -1,0 +1,18 @@
+[
+  {
+    "id": "doc-privacy",
+    "content": "Politique de confidentialite GenAI. Les prompts envoyes aux foundation models AWS Bedrock ne sont pas utilises pour entrainer les modeles de base par defaut. Les logs et traces sont conserves 30 jours en region eu-west-1, puis supprimes. Les secrets (clés API, mots de passe, identifiants) ne doivent jamais apparaitre dans un prompt. Toute violation doit etre signalee a l equipe de securite sous 24h. Le client est responsable du chiffrement cote client avant tout transfert de donnees sensibles."
+  },
+  {
+    "id": "doc-bedrock-faq",
+    "content": "Amazon Bedrock est un service fully managed qui expose des foundation models via une API unifiee. Les principaux modeles sont Claude (Anthropic), Nova (AWS), Titan (AWS), Llama (Meta), Mistral, et Cohere. L acces se fait par model access (activation one-shot par compte et par region) puis via les API InvokeModel ou Converse. Les guardrails permettent de filtrer contenus indesirable, PII, et prompt injection. Les Knowledge Bases gerent le RAG de bout en bout: ingestion, chunking, embedding, retrieval, et citation."
+  },
+  {
+    "id": "doc-rag-overview",
+    "content": "Le pattern RAG (Retrieval-Augmented Generation) ajoute une phase de retrieval avant l appel au modele. Le retrieval utilise une recherche par similarite sur des embeddings stockes dans une base vectorielle. Les chunks pertinents sont injectes dans le prompt comme contexte, ce qui ancre la reponse et reduit les hallucinations. Les metriques de qualite d un RAG sont la pertinence du retrieval, la fidelite au contexte, et la couverture du corpus. Une reponse RAG defendable cite ses sources et refuse de repondre si le contexte est vide ou perime."
+  },
+  {
+    "id": "doc-iam-genai",
+    "content": "Les permissions IAM pour GenAI sur AWS reposent sur trois axes: acces au modele (bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream), acces aux donnees (S3, OpenSearch, RDS, Aurora), et audit (CloudTrail). Le pattern recommande est un role par application, avec une trust policy limitant les conditions d assume role (MFA, sourceIp, ExternalId). Les denies explicites sont preferes aux permissions larges: un role GenAI ne doit jamais avoir iam:* ni secretsmanager:GetSecretValue sauf justification documentee."
+  }
+]

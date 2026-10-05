@@ -1,0 +1,29 @@
+[
+  {
+    "modelId": "meta-textgeneration-llama-2-7b-f",
+    "provider": "meta",
+    "task": "text-generation",
+    "instance": "ml.g5.2xlarge",
+    "region": "eu-west-1",
+    "license": "custom-commercial-ok",
+    "payloadFormat": {"inputs": "<text>", "parameters": {"max_new_tokens": 256}}
+  },
+  {
+    "modelId": "huggingface-llm-mistral-7b-instruct",
+    "provider": "mistral",
+    "task": "text-generation",
+    "instance": "ml.g5.2xlarge",
+    "region": "eu-west-1",
+    "license": "apache-2.0",
+    "payloadFormat": {"inputs": "<text>", "parameters": {"max_new_tokens": 256, "temperature": 0.0}}
+  },
+  {
+    "modelId": "huggingface-llm-bge-large-en-v1.5",
+    "provider": "bge",
+    "task": "feature-extraction",
+    "instance": "ml.g5.xlarge",
+    "region": "eu-west-1",
+    "license": "mit",
+    "payloadFormat": {"inputs": ["<text>"]}
+  }
+]

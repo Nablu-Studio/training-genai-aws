@@ -1,0 +1,22 @@
+[
+  {
+    "id": "chunk-bedrock-overview",
+    "content": "Amazon Bedrock expose des foundation models en API: on choisit un modele, on l'appelle via InvokeModel ou converse, et on controle l'usage avec IAM, region et model access.",
+    "freshnessDays": 5
+  },
+  {
+    "id": "chunk-retrieval-principles",
+    "content": "Le retrieval precede la generation: on classe les chunks par similarite, on garde les topK, et on injecte le contexte dans le prompt pour ancrer la reponse.",
+    "freshnessDays": 12
+  },
+  {
+    "id": "chunk-citation-contract",
+    "content": "Une reponse RAG defendable doit citer ses sources et refuser plutot qu'inventer quand le contexte ne couvre pas la question.",
+    "freshnessDays": 3
+  },
+  {
+    "id": "chunk-stale-data",
+    "content": "Une donnee depassee de plus de 30 jours doit declencher un mode no_answer explicite, pas une reponse a partir d'un contexte douteux.",
+    "freshnessDays": 60
+  }
+]

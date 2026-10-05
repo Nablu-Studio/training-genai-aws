@@ -1,0 +1,22 @@
+[
+  {
+    "id": "vec-bedrock-iam",
+    "content": "Pour invoquer un foundation model Bedrock depuis une application, le role IAM doit disposer de bedrock:InvokeModel et, pour les flux RAG, de bedrock:Retrieve. L acces est verifie par region et par modelId.",
+    "metadata": {"category": "iam", "freshnessDays": 5}
+  },
+  {
+    "id": "vec-vector-guardrail",
+    "content": "Un guardrail Bedrock bloque le prompt ou la reponse selon des filtres thematiques, PII, ou prompt injection. Il s applique via guardrailConfig dans l appel converse.",
+    "metadata": {"category": "guardrail", "freshnessDays": 7}
+  },
+  {
+    "id": "vec-rag-freshness",
+    "content": "Une donnee RAG de plus de 30 jours doit declencher un mode no_answer explicite, pas une reponse a partir d un contexte perime.",
+    "metadata": {"category": "rag", "freshnessDays": 60}
+  },
+  {
+    "id": "vec-observability-redact",
+    "content": "Les logs d observabilite GenAI ne doivent jamais contenir le prompt integral. On logge un hash SHA-256, la longueur, et des metadonnees categorielles.",
+    "metadata": {"category": "observability", "freshnessDays": 3}
+  }
+]

@@ -1,0 +1,8 @@
+Reponds de maniere factuelle et concise.
+Exemples:
+Q: capitale de la France ?
+A: Paris
+Q: service AWS GenAI ?
+A: Amazon Bedrock
+Q: base vectorielle AWS low cost ?
+A: S3 Vectors

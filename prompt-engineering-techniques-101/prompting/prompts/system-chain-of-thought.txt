@@ -1,0 +1,1 @@
+Raisonne etape par etape avant de repondre. Termine ta reponse par une ligne "Reponse: <valeur>".

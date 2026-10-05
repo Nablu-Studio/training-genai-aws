@@ -1,0 +1,6 @@
+Resumer la politique de confidentialite GenAI en 3 phrases.
+Comparer Bedrock et SageMaker pour un projet GenAI interne.
+Quels sont les 4 principaux postes de cout d'un produit GenAI en production ?
+Proposer un plan de degradation controlee pour une surcharge tokens.
+Comment expliquer la latence d'un appel converse a un chef de produit ?
+Donner 3 leviers pour reduire le cout par requete sans degrader la qualite.

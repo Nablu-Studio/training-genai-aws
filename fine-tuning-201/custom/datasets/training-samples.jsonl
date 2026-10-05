@@ -1,0 +1,10 @@
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quelle est la capitale de la France ?\nReponse:", "completion": " Paris."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quel service AWS heberge un foundation model ?\nReponse:", "completion": " Amazon Bedrock."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Cite une base vectorielle AWS.\nReponse:", "completion": " OpenSearch Service, S3 Vectors, Aurora pgvector ou MemoryDB."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Qu est-ce qu un guardrail Bedrock ?\nReponse:", "completion": " Un controle qui filtre ou refuse les prompts et reponses indesirables."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quel mecanisme gere la personnalisation d un FM ?\nReponse:", "completion": " Un job de fine-tuning, continued pre-training, ou custom model import."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quelle est la difference entre on-demand et Provisioned Throughput ?\nReponse:", "completion": " On-demand est a la requete sans engagement, Provisioned Throughput est un engagement mensuel par model unit."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quel mecanisme capture les traces LLM ?\nReponse:", "completion": " Une pipeline d observabilite avec CloudWatch, X-Ray et redaction des secrets."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Comment evaluer un LLM en production ?\nReponse:", "completion": " Avec un dataset de golden answers, des metriques automatisees et un suivi humain."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quel mecanisme empeche un prompt hostile ?\nReponse:", "completion": " Un guardrail combine a un system prompt strict et a un test d injection."}
+{"prompt": "Personnalite: GenAI Certification.\nQuestion: Quel est le risque d un embedding non normalise ?\nReponse:", "completion": " Le calcul de similarite cosinus devient errone et la qualite du retrieval baisse."}
