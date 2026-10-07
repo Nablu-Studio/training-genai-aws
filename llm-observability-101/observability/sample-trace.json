@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-06-30T10:30:00Z",
+  "prompt_version": "v1",
+  "prompt_preview": "[redacted]",
+  "latency_ms": 842.5,
+  "input_tokens": 321,
+  "output_tokens": 118,
+  "status": "success"
+}

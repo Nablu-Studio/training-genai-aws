@@ -1,0 +1,7 @@
+{
+  "sources": [
+    {"path": "s3://genai-kb-docs/public/", "sensitivity": "public"},
+    {"path": "s3://genai-kb-docs/internal/", "sensitivity": "internal"}
+  ],
+  "requiredMetadata": ["source", "updated_at", "sensitivity", "owner"]
+}

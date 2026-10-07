@@ -1,0 +1,20 @@
+[
+  {
+    "product": "q_business",
+    "audience": "business_users",
+    "bestFor": ["internal_docs", "data_analyst", "hr_assistant", "support"],
+    "identity": "iam_identity_center_required",
+    "dataSource": "native_index",
+    "ui": "web_app",
+    "pricingModel": "per_user_per_month"
+  },
+  {
+    "product": "q_developer",
+    "audience": "developers",
+    "bestFor": ["code_assist", "transformation", "cli_help", "security_scan"],
+    "identity": "iam_identity_center_optional",
+    "dataSource": "code_repositories",
+    "ui": "ide_plugin_cli",
+    "pricingModel": "per_user_per_month"
+  }
+]

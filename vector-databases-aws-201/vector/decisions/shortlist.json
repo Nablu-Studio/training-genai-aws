@@ -1,0 +1,22 @@
+{
+  "shortlist": [
+    {
+      "name": "OpenSearch Service",
+      "justification": "Requete hybride (BM25 + k-NN) et filtres metadata riches. Couvre 80% des cas RAG entreprise."
+    },
+    {
+      "name": "S3 Vectors",
+      "justification": "Cout marginal le plus bas. Ideal pour les gros volumes avec requete strictement k-NN et peu de filtres."
+    }
+  ],
+  "rejected": [
+    {
+      "name": "Aurora pgvector",
+      "reason": "Pertinent uniquement si on melange requetes relationnelles et recherche vectorielle dans la meme transaction."
+    },
+    {
+      "name": "MemoryDB Vector",
+      "reason": "Reserve aux cas ultra low-latency (sub-10ms) avec cache et hot data."
+    }
+  ]
+}

@@ -19,13 +19,13 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDenied": "Droits insuffisants sur IAM : il faut iam:GetRole ou équivalent.",
     "AccessDeniedException": "Insufficient permissions: check the IAM policy of the role or current identity.",
-    "ConflictException": "Une ressource du même nom existe déjà : supprimez-la ou changez de nom.",
+    "ConflictException": "Resource with the same name already exists: delete it or choose another name.",
     "DecryptionFailure": "Déchiffrement impossible : vérifiez les droits sur la clé KMS du secret.",
     "NoSuchEntity": "Rôle ou policy introuvable : vérifiez le nom exact.",
     "ResourceNotFoundException": "Secret introuvable : vérifiez son nom et la région.",
-    "ServiceQuotaExceededException": "Quota de service atteint : demandez une augmentation ou libérez une ressource.",
+    "ServiceQuotaExceededException": "Service quota exceeded: request a quota increase or release unused resources.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 

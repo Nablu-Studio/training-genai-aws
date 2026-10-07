@@ -21,7 +21,7 @@ PROFILES = {
 
 
 def mu_required(model: dict, tpm: int) -> int:
-    # Une MU couvre `muCapacityTokensPerMin` tokens par minute, on arrondit au supérieur.
+    # One model unit covers `muCapacityTokensPerMin` tokens/min, rounding up.
     return max(1, round(tpm / model["muCapacityTokensPerMin"]))
 
 
@@ -31,7 +31,7 @@ def tco_pt(model: dict, mu: int, hours: int) -> float:
 
 
 def tco_on_demand(model: dict, tpm: int, hours: int) -> float:
-    # Hypothèse 50/50 input/output pour le calcul on-demand.
+    # 50/50 input/output token ratio assumption for on-demand cost calculations.
     total_tokens = tpm * 60 * hours
     return round(
         (total_tokens * 0.5 * model["onDemandInputPer1k"] / 1000)
@@ -41,7 +41,7 @@ def tco_on_demand(model: dict, tpm: int, hours: int) -> float:
 
 
 def tco_hybrid(model: dict, tpm: int, hours: int) -> float:
-    # Stratégie hybride : PT couvre la charge de base, on-demand absorbe les pics.
+    # Hybrid model: provisioned throughput absorbs base load, on-demand absorbs peaks.
     base = min(tpm, model["muCapacityTokensPerMin"])
     peak = max(0, tpm - base)
     base_mu = mu_required(model, base)
@@ -55,7 +55,7 @@ def tco_hybrid(model: dict, tpm: int, hours: int) -> float:
 
 
 def main() -> None:
-    # Sélection du modèle cible puis évaluation des trois stratégies par profil d'usage.
+    # Target model selection, then evaluate the three pricing strategies per profile.
     model = next(item for item in PRICING if item["modelId"] == "amazon.nova-lite-v1:0")
     results: list[dict] = []
     for name, profile in PROFILES.items():
@@ -63,7 +63,7 @@ def main() -> None:
         pt = tco_pt(model, mu, profile["utilizationHours"])
         on_demand = tco_on_demand(model, profile["tokensPerMin"], profile["utilizationHours"])
         hybrid = tco_hybrid(model, profile["tokensPerMin"], profile["utilizationHours"])
-        # Le "winner" est la stratégie la moins chère pour ce profil.
+        # Cost winner is the strategy with the lowest total monthly expenditure.
         winner = min(
             ("pt", pt),
             ("on_demand", on_demand),

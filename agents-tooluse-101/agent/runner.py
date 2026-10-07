@@ -10,7 +10,7 @@ from tools import create_ticket
 
 
 def main() -> None:
-    # Invocation directe du tool avec une clé d'idempotence fixe pour la démo.
+    # Direct tool invocation with a fixed idempotency key for reproducible demo.
     result = create_ticket(
         title="Investigate prompt regression",
         severity="medium",

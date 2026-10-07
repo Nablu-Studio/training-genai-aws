@@ -11,13 +11,13 @@ from dataclasses import dataclass
 
 @dataclass
 class ToolResult:
-    # Format neutre consommé par le runner et l'agent Bedrock (status + payload).
+    # Neutral format consumed by both runner and Bedrock agent (status + payload).
     status: str
     payload: dict
 
 
 def create_ticket(title: str, severity: str, idempotency_key: str) -> ToolResult:
-    # Stub : on dérive un ID de ticket à partir de la clé d'idempotence.
+    # Stub implementation: derive a ticket ID from the idempotency key.
     return ToolResult(
         status="created",
         payload={

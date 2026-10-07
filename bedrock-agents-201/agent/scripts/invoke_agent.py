@@ -21,7 +21,7 @@ AWS_ERROR_HINTS = {
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
     "ResourceNotFoundException": "Agent, alias, or Knowledge Base not found: check identifier and region.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 

@@ -18,7 +18,7 @@ AWS_ERROR_HINTS = {
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
     "ResourceNotFoundException": "Agent, alias, or Knowledge Base not found: check identifier and region.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -35,7 +35,7 @@ KB_ID = "KB_ID_PLACEHOLDER"
 
 
 def main() -> None:
-    # Retrieve avec un filtre de métadonnées `sensitivity = internal`.
+    # Retrieve knowledge chunks using metadata filter `sensitivity = internal`.
     client = boto3.client("bedrock-agent-runtime", region_name=AWS_REGION)
     response = client.retrieve(
         knowledgeBaseId=KB_ID,
@@ -52,7 +52,7 @@ def main() -> None:
             }
         },
     )
-    # Sérialisation brute pour debug UI.
+    # Raw serialization for UI debugging.
     Path("kb/retrieve-response.json").write_text(
         json.dumps(response, indent=2, default=str),
         encoding="utf-8",
@@ -60,7 +60,7 @@ def main() -> None:
 
     results = response.get("retrievalResults", [])
     first_result = results[0] if results else {}
-    # Résumé console : nombre de matches + location du top hit.
+    # Console summary: match count plus location of the top hit.
     print(
         json.dumps(
             {

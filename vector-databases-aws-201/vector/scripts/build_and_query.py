@@ -21,7 +21,7 @@ AWS_ERROR_HINTS = {
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
     "ResourceNotFoundException": "Domaine OpenSearch introuvable : vérifiez son nom et la région.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -70,7 +70,7 @@ def main() -> None:
         )
         insert_latencies.append(round((time.perf_counter() - started) * 1000, 2))
 
-    # Requête hybride : k-NN sur l'embedding + filtre méta sur la fraîcheur.
+    # Hybrid retrieval: k-NN vector search plus metadata freshness filtering.
     query = "Comment proteger les appels Bedrock ?"
     started = time.perf_counter()
     response = os_client.search(
@@ -89,7 +89,7 @@ def main() -> None:
     )
     query_latency = round((time.perf_counter() - started) * 1000, 2)
     hits = [hit["_id"] for hit in response["hits"]["hits"]]
-    # Écriture de l'artefact d'audit : latences d'insertion et de recherche + IDs matchés.
+    # Write audit artifact: indexing and search latencies plus matched chunk IDs.
     audit = {
         "indexName": INDEX_NAME,
         "region": AWS_REGION,

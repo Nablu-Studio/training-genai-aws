@@ -19,9 +19,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -42,11 +42,11 @@ OUTPUT_PATH = Path("rag/audit/multimodal-rag-audit.json")
 
 
 def main() -> None:
-    # Lecture de l'image et encodage base64 attendu par les deux API Bedrock.
+    # Read image bytes and encode to base64 required by Bedrock multimodal APIs.
     image_bytes = Path(IMAGE_PATH).read_bytes()
     image_b64 = base64.b64encode(image_bytes).decode("ascii")
     runtime = boto3.client("bedrock-runtime", region_name=AWS_REGION)
-    # Step 1: embedding multimodal pour indexation/recherche.
+    # Step 1: multimodal embedding generation for semantic search indexing.
     embed_started = time.perf_counter()
     embed_response = runtime.invoke_model(
         modelId=EMBED_MODEL,
@@ -57,7 +57,7 @@ def main() -> None:
     embed_latency_ms = round((time.perf_counter() - embed_started) * 1000, 2)
     embedding = json.loads(embed_response["body"].read())["embedding"]
 
-    # Step 2: appel converse multimodal pour générer la description en langage naturel.
+    # Step 2: multimodal Converse API call to generate natural language description.
     vision_started = time.perf_counter()
     vision_response = runtime.converse(
         modelId=VISION_MODEL,
@@ -73,7 +73,7 @@ def main() -> None:
         inferenceConfig={"temperature": 0.0, "maxTokens": 256},
     )
     vision_latency_ms = round((time.perf_counter() - vision_started) * 1000, 2)
-    # Concaténation défensive des blocs de contenu (texte, image, etc.).
+    # Defensive concatenation across response content blocks.
     answer = "".join(
         block.get("text", "")
         for block in vision_response["output"]["message"].get("content", [])

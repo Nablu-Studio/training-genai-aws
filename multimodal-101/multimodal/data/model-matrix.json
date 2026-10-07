@@ -1,0 +1,42 @@
+[
+  {
+    "modelId": "amazon.nova-lite-v1:0",
+    "vendor": "Amazon",
+    "task": "vision",
+    "input": ["text", "image"],
+    "output": ["text"],
+    "maxImageMegapixels": 5,
+    "pricing": { "unit": "1k_tokens", "input": 0.06, "output": 0.24 },
+    "useCase": "Assistant de documents, description d image, OCR leger"
+  },
+  {
+    "modelId": "anthropic.claude-3-sonnet-20240229-v1:0",
+    "vendor": "Anthropic",
+    "task": "vision",
+    "input": ["text", "image"],
+    "output": ["text"],
+    "maxImageMegapixels": 5,
+    "pricing": { "unit": "1k_tokens", "input": 0.003, "output": 0.015 },
+    "useCase": "Raisonnement sur image, classification fine, comparaison multi-images"
+  },
+  {
+    "modelId": "amazon.titan-image-generator-v1",
+    "vendor": "Amazon",
+    "task": "image_generation",
+    "input": ["text"],
+    "output": ["image"],
+    "maxImageMegapixels": 1,
+    "pricing": { "unit": "per_image", "value": 0.012 },
+    "useCase": "Visuels marketing, mockups, illustrations low-poly"
+  },
+  {
+    "modelId": "stability.stable-diffusion-xl-v1",
+    "vendor": "Stability AI",
+    "task": "image_generation",
+    "input": ["text"],
+    "output": ["image"],
+    "maxImageMegapixels": 1,
+    "pricing": { "unit": "per_image", "value": 0.018 },
+    "useCase": "Style artistique, prototypage visuel, presets"
+  }
+]

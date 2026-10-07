@@ -17,9 +17,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -60,7 +60,7 @@ client = boto3.client("bedrock-runtime", region_name=AWS_REGION)
 
 
 def validate_payload(payload: dict) -> dict:
-    # L'enum est défini une seule fois dans TOOL_SPEC : on s'y réfère pour valider.
+    # Enum values defined once in TOOL_SPEC: reference it directly for validation.
     issues: list[str] = []
     service = payload.get("service")
     if not isinstance(service, str):
@@ -78,7 +78,7 @@ def call_once(question: str) -> dict:
         toolConfig={"tools": [TOOL_SPEC]},
     )
     output = response["output"]["message"]
-    # On isole uniquement les blocs de type `toolUse` (les autres sont du texte).
+    # Isolate only `toolUse` content blocks (remaining blocks contain freeform text).
     tool_calls = [
         block for block in output.get("content", []) if isinstance(block, dict) and "toolUse" in block
     ]
@@ -101,7 +101,7 @@ def call_once(question: str) -> dict:
 
 
 def main() -> None:
-    # Une seule question démo + audit du tool appelé et de la validité de l'input.
+    # Single demo query + audit log of invoked tool name and input parameter validity.
     question = "Donne moi la fiche du service Bedrock."
     result = call_once(question)
     validation = (

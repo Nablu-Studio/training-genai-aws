@@ -1,0 +1,14 @@
+[
+  {
+    "input": "Explique Amazon Bedrock en une phrase.",
+    "expected": "Amazon Bedrock est un service manage AWS pour acceder a des foundation models et construire des applications d'IA generative."
+  },
+  {
+    "input": "A quoi sert une evaluation de prompt ?",
+    "expected": "Une evaluation de prompt sert a comparer de facon reproductible la qualite, la latence et le cout de plusieurs versions."
+  },
+  {
+    "input": "Pourquoi versionner un prompt ?",
+    "expected": "Versionner un prompt permet de relier chaque changement a un resultat mesurable et a une decision produit explicable."
+  }
+]

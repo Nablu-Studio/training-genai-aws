@@ -28,7 +28,7 @@ AWS_ERROR_HINTS = {
     "ModelError": "Le modèle a rejeté le payload : comparez-le au payloadFormat du catalogue.",
     "ResourceNotFound": "Endpoint introuvable : il a peut-être déjà été supprimé, ou vous n'êtes pas dans la bonne région.",
     "ServiceUnavailable": "Endpoint pas encore prêt : un cold start JumpStart prend 30 à 90 secondes.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -69,7 +69,7 @@ def invoke(endpoint_name: str, payload: dict) -> dict:
     body = json.loads(response["Body"].read())
     return {
         "latencyMs": round((time.perf_counter() - started) * 1000, 2),
-        # La forme de la réponse dépend du modèle : on garde un extrait lisible.
+        # Model payload structure varies: extract a clean readable snippet.
         "response": json.dumps(body, ensure_ascii=False)[:800],
     }
 
@@ -87,8 +87,8 @@ def teardown(endpoint_name: str) -> list[dict]:
             call()
             results.append({"resource": label, "deleted": True})
         except ClientError as exc:
-            # Une ressource déjà absente n'est pas un échec : on continue la
-            # suppression des deux autres, sinon un oubli reste facturé.
+            # Already deleted resource is not an error: continue tearing down
+            # the other two resources to prevent ongoing cloud billing.
             results.append(
                 {"resource": label, "deleted": False, "error": exc.response["Error"].get("Code", "Unknown")}
             )

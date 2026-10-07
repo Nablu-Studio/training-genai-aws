@@ -22,9 +22,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -58,7 +58,7 @@ def parse_triplets(answer: str) -> list[dict]:
         parsed = json.loads(answer[start : end + 1])
     except json.JSONDecodeError:
         return []
-    # On ne garde que les triplets complets : un champ manquant casse le graphe.
+    # Keep only complete triples: missing subject, predicate, or object breaks the graph.
     return [
         {"sujet": str(item["sujet"]), "relation": str(item["relation"]), "objet": str(item["objet"])}
         for item in parsed
@@ -70,7 +70,7 @@ def extract_from_chunk(client, chunk: dict) -> tuple[list[dict], dict]:
     response = client.converse(
         modelId=MODEL_ID,
         messages=[{"role": "user", "content": [{"text": f"{INSTRUCTION}\n\nPassage :\n{chunk['content']}"}]}],
-        # Température nulle : deux exécutions doivent donner le même graphe.
+        # Zero temperature: ensure deterministic, reproducible entity graph extraction.
         inferenceConfig={"maxTokens": 500, "temperature": 0},
     )
     answer = response["output"]["message"]["content"][0]["text"]

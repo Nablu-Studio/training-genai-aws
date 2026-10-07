@@ -17,11 +17,11 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 # Distinguishable failure modes when the call fails.
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Insufficient permissions: check the IAM policy of the role or current identity.",
-    "ConflictException": "Une ressource du même nom existe déjà : supprimez-la ou changez de nom.",
-    "ResourceNotFoundException": "Ressource Bedrock introuvable : vérifiez l'identifiant et la région.",
-    "ServiceQuotaExceededException": "Quota de service atteint : demandez une augmentation ou libérez une ressource.",
+    "ConflictException": "Resource with the same name already exists: delete it or choose another name.",
+    "ResourceNotFoundException": "Bedrock resource not found: verify identifier and region.",
+    "ServiceQuotaExceededException": "Service quota exceeded: request a quota increase or release unused resources.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -42,12 +42,12 @@ PRICING_PATH = Path("pricing/data/model-pricing.json")
 
 
 def size_for_traffic(model: dict, target_tokens_per_min: int) -> int:
-    # Une MU = `muCapacityTokensPerMin` tokens/min, on dimensionne au plus juste.
+    # One model unit = `muCapacityTokensPerMin` tokens/min: size precisely to target throughput.
     return max(1, round(target_tokens_per_min / model["muCapacityTokensPerMin"]))
 
 
 def main() -> None:
-    # Dimensionnement : taille en MU + projection du coût mensuel (24h * 30j).
+    # Sizing calculation: required model units and projected monthly cost (24h * 30d).
     pricing = json.loads(PRICING_PATH.read_text(encoding="utf-8"))
     model = next(item for item in pricing if item["modelId"] == TARGET_MODEL)
     model_units = size_for_traffic(model, TARGET_TPM)
@@ -55,7 +55,7 @@ def main() -> None:
 
     dry_run = bool(int(os.environ.get("TRAINING_PT_DRY_RUN", "1")))
     if dry_run:
-        # Branche par default: aucun appel AWS, on documente l'intention d'achat.
+        # Default dry-run branch: no AWS API call; records purchase intent to audit log.
         audit = {
             "dryRun": True,
             "modelId": TARGET_MODEL,

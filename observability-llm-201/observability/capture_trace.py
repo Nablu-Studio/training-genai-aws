@@ -18,9 +18,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -37,20 +37,20 @@ client = boto3.client("bedrock-runtime", region_name="eu-west-1")
 
 
 def main() -> None:
-    # Mesure de la latence totale de bout en bout, utile pour le dashboard.
+    # Measure end-to-end roundtrip latency for dashboard metrics.
     started_at = perf_counter()
     response = client.converse(
         modelId="amazon.nova-lite-v1:0",
         messages=[{"role": "user", "content": [{"text": "Resume la politique d'acces en 2 points."}]}],
     )
-    # Trace minimaliste : identifiant AWS, raison d'arrêt, aperçu tronqué du contenu.
+    # Minimal trace: AWS request ID, stop reason, and truncated content snippet.
     trace = {
         "latency_ms": round((perf_counter() - started_at) * 1000, 2),
         "request_id": response["ResponseMetadata"]["RequestId"],
         "stop_reason": response.get("stopReason"),
         "output_preview": response["output"]["message"]["content"][0]["text"][:120],
     }
-    # Écriture de la trace pour exploitation par la UI de formation.
+    # Write execution trace for consumption by the training UI.
     Path("observability/redacted-trace.json").write_text(
         json.dumps(trace, indent=2),
         encoding="utf-8",

@@ -21,9 +21,9 @@ from rerank import rerank
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -55,7 +55,7 @@ def load_policy() -> dict:
 
 
 def select_chunks(question: str, chunks: list[dict], top_k: int = 3) -> list[dict]:
-    # Re-ranking local puis conservation des top-k chunks les plus pertinents.
+    # Local re-ranking, then retain the top-k most relevant chunks.
     return [
         {**chunk, "score": rank}
         for rank, chunk in enumerate(rerank(chunks, question)[:top_k], start=1)
@@ -63,12 +63,12 @@ def select_chunks(question: str, chunks: list[dict], top_k: int = 3) -> list[dic
 
 
 def build_context(chunks: list[dict]) -> str:
-    # Format `[id] contenu` pour faciliter l'extraction des citations côté modèle.
+    # Format `[id] content` to facilitate citation extraction by the model.
     return "\n\n".join(f"[{chunk['id']}] {chunk['content']}" for chunk in chunks)
 
 
 def is_fresh(chunks: list[dict], policy: dict) -> bool:
-    # Tous les chunks doivent être plus récents que le seuil métier.
+    # All chunks must be fresher than the configured business threshold.
     stale_after = policy.get("staleAfterDays", 30)
     return all(chunk.get("freshnessDays", 0) <= stale_after for chunk in chunks)
 
@@ -108,7 +108,7 @@ def run_question(client, question: str, chunks: list[dict], policy: dict) -> dic
         for block in response["output"]["message"].get("content", [])
         if isinstance(block, dict)
     ).strip()
-    # Extraction des IDs cités dans la réponse pour auditabilité.
+    # Extract referenced chunk IDs from model answer for citation auditability.
     cited = [token for token in answer.split() if token.startswith("[") and token.endswith("]")]
     return {
         "question": question,

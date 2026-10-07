@@ -15,11 +15,11 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 # Distinguishable failure modes when the call fails.
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Insufficient permissions: check the IAM policy of the role or current identity.",
-    "ConflictException": "Une ressource du même nom existe déjà : supprimez-la ou changez de nom.",
-    "ResourceNotFoundException": "Ressource Bedrock introuvable : vérifiez l'identifiant et la région.",
-    "ServiceQuotaExceededException": "Quota de service atteint : demandez une augmentation ou libérez une ressource.",
+    "ConflictException": "Resource with the same name already exists: delete it or choose another name.",
+    "ResourceNotFoundException": "Bedrock resource not found: verify identifier and region.",
+    "ServiceQuotaExceededException": "Service quota exceeded: request a quota increase or release unused resources.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -48,7 +48,7 @@ def load_control_matrix() -> list[dict]:
 
 
 def select_runtime_control(control_matrix: list[dict]) -> dict:
-    # Premier contrôle "runtime" trouvé, sinon fallback sur le premier de la matrice.
+    # First "runtime" control found, otherwise fallback to the first control in the matrix.
     return next(
         (item for item in control_matrix if item["control"] == "bedrock_guardrail_runtime"),
         control_matrix[0],
@@ -65,11 +65,11 @@ def build_create_payload(policy: dict) -> dict:
         ),
         "blockedInputMessaging": policy.get(
             "blockedInputMessaging",
-            "Votre demande a ete bloquee par le guardrail.",
+            "Your request was blocked by the safety guardrail.",
         ),
         "blockedOutputsMessaging": policy.get(
             "blockedOutputsMessaging",
-            "La reponse a ete bloquee par le guardrail.",
+            "The response was blocked by the safety guardrail.",
         ),
         "contentPolicyConfig": {
             "filtersConfig": [

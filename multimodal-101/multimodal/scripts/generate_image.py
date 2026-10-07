@@ -19,9 +19,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -44,7 +44,7 @@ GEN_OUTPUT = Path("multimodal/output/generated.png")
 
 
 def generate_image(prompt: str) -> dict:
-    # invoke_model avec taskType=TEXT_IMAGE : payload conforme Titan Image Generator.
+    # invoke_model with taskType=TEXT_IMAGE: conforms to Titan Image Generator schema.
     bedrock = boto3.client("bedrock-runtime", region_name=AWS_REGION)
     started = time.perf_counter()
     response = bedrock.invoke_model(
@@ -66,7 +66,7 @@ def generate_image(prompt: str) -> dict:
     )
     latency_ms = round((time.perf_counter() - started) * 1000, 2)
     payload = json.loads(response["body"].read())
-    # Titan renvoie du base64 : on décode puis on écrit le PNG sur disque.
+    # Titan returns base64: decode bytes and write the PNG image to disk.
     image_bytes = base64.b64decode(payload["images"][0])
     GEN_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     GEN_OUTPUT.write_bytes(image_bytes)
@@ -80,7 +80,7 @@ def generate_image(prompt: str) -> dict:
 
 
 def main() -> None:
-    # Une seule exécution, audit JSON + image binaire pour la UI.
+    # Single execution: outputs JSON audit log plus binary image for the UI.
     audit = generate_image(PROMPT)
     AUDIT_PATH.parent.mkdir(parents=True, exist_ok=True)
     AUDIT_PATH.write_text(json.dumps(audit, indent=2), encoding="utf-8")

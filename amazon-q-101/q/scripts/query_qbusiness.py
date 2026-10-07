@@ -17,9 +17,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 # Distinguishable failure modes when the call fails.
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Insufficient permissions: check the IAM policy of the role or current identity.",
-    "ResourceNotFoundException": "Application Q Business introuvable : vérifiez TRAINING_QBIZ_APPLICATION_ID et la région.",
+    "ResourceNotFoundException": "Q Business application not found: verify TRAINING_QBIZ_APPLICATION_ID and region.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -55,13 +55,13 @@ def call_qbusiness() -> dict:
         "systemMessage": response.get("systemMessage", ""),
         "latencyMs": latency_ms,
         "requestId": response["ResponseMetadata"]["RequestId"],
-        # `skipped` permet à la UI d'afficher un état "à provisionner" sans crash.
+        # `skipped` status allows the UI to display a "provision required" state without crashing.
         "skipped": APPLICATION_ID.startswith("REPLACE_") or USER_ID.startswith("REPLACE_"),
     }
 
 
 def main() -> None:
-    # Si l'app n'est pas configurée, on ajoute une note pédagogique à l'artefact.
+    # If the application is not configured, attach an educational note to the audit artifact.
     result = call_qbusiness()
     if result.get("skipped"):
         result["note"] = (

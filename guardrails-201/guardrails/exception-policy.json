@@ -1,0 +1,7 @@
+{
+  "category": "medical",
+  "defaultAction": "warn",
+  "exceptionRequiresApproval": true,
+  "exceptionTtlHours": 24,
+  "auditReasonCode": "POLICY_EXCEPTION"
+}

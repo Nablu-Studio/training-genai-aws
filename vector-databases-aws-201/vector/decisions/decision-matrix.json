@@ -1,0 +1,27 @@
+{
+  "criteria": [
+    {"key": "latency", "description": "Latence p99 d une requete k-NN topK=10 en ms"},
+    {"key": "cost", "description": "Cout par million de requetes par mois, dimension 1024"},
+    {"key": "ops", "description": "Complexite operationnelle (patch, scaling, backup)"},
+    {"key": "query", "description": "Richesse de la requete (filtres, hybride, multi-tenant)"},
+    {"key": "scale", "description": "Capacite de scale out au dela de 100M vecteurs"}
+  ],
+  "options": [
+    {
+      "name": "S3 Vectors",
+      "scores": {"latency": 7, "cost": 9, "ops": 9, "query": 4, "scale": 9}
+    },
+    {
+      "name": "OpenSearch Service",
+      "scores": {"latency": 7, "cost": 5, "ops": 5, "query": 9, "scale": 8}
+    },
+    {
+      "name": "Aurora pgvector",
+      "scores": {"latency": 6, "cost": 6, "ops": 6, "query": 8, "scale": 6}
+    },
+    {
+      "name": "MemoryDB Vector",
+      "scores": {"latency": 9, "cost": 5, "ops": 6, "query": 5, "scale": 6}
+    }
+  ]
+}

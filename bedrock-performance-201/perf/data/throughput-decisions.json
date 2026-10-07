@@ -1,0 +1,26 @@
+[
+  {
+    "name": "on_demand",
+    "engagement": "none",
+    "latency": "variable (file partagee)",
+    "billing": "per_1k_tokens",
+    "bestFor": ["sporadic", "test", "low_risk"],
+    "useCase": "Application en test, charges sporadiques, traffic < 100 RPM"
+  },
+  {
+    "name": "provisioned_throughput",
+    "engagement": "monthly",
+    "latency": "stable (cap reserve)",
+    "billing": "per_model_unit_per_hour",
+    "bestFor": ["steady", "production_sla"],
+    "useCase": "Charge previsible, SLA dur, latency p99 stricte"
+  },
+  {
+    "name": "batch",
+    "engagement": "none",
+    "latency": "async (jusqu a 24h)",
+    "billing": "tokens_50_percent_off",
+    "bestFor": ["offline", "bulk_eval", "re_embedding"],
+    "useCase": "Re-embedding massif, evaluation hors-ligne, generation de dataset"
+  }
+]

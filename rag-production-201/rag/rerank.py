@@ -8,7 +8,7 @@ Mode : calcul local, aucun appel AWS.
 
 
 def rerank(chunks: list[dict], query: str) -> list[dict]:
-    # Score = nombre de tokens de la requête présents dans le contenu du chunk.
+    # Score = count of query tokens present within the chunk text.
     query_tokens = set(query.lower().split())
     return sorted(
         chunks,

@@ -16,9 +16,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -38,14 +38,14 @@ def load_runtime_config() -> dict:
 
 
 def main() -> None:
-    # On relit la config publiée par `create_guardrail.py` (séparation build / run).
+    # Read configuration exported by `create_guardrail.py` (build vs run separation).
     runtime_config = load_runtime_config()
     active_control = runtime_config["activeControl"]
     client = boto3.client(
         "bedrock-runtime",
         region_name=runtime_config["region"],
     )
-    # L'appel converse embarque le guardrailConfig pour appliquer la version pinning.
+    # Converse API call attaches guardrailConfig to enforce version pinning.
     response = client.converse(
         modelId=runtime_config["modelId"],
         messages=[

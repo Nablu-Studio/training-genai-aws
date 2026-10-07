@@ -17,9 +17,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -36,7 +36,7 @@ client = boto3.client("bedrock-runtime", region_name="eu-west-1")
 
 
 def main() -> None:
-    # Tool unique `create_ticket` avec schéma JSON : title + severity obligatoires.
+    # Single `create_ticket` tool with JSON schema: title and severity are required.
     response = client.converse(
         modelId="amazon.nova-lite-v1:0",
         messages=[{"role": "user", "content": [{"text": "Cree un ticket pour une regression de prompt."}]}],
@@ -45,7 +45,7 @@ def main() -> None:
                 {
                     "toolSpec": {
                         "name": "create_ticket",
-                        "description": "Cree un ticket dans le systeme de support",
+                        "description": "Creates a ticket in the support ticketing system",
                         "inputSchema": {
                             "json": {
                                 "type": "object",
@@ -61,7 +61,7 @@ def main() -> None:
             ]
         },
     )
-    # Sérialisation brute pour analyse offline par la UI.
+    # Raw serialization for offline inspection by the training UI.
     Path("agent/tooluse-response.json").write_text(
         json.dumps(response, indent=2, default=str),
         encoding="utf-8",

@@ -23,9 +23,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -52,7 +52,7 @@ class PromptRunResult:
 
 
 def parse_args() -> argparse.Namespace:
-    # argparse : baseline/candidate/dataset obligatoires, model/region/output avec défauts.
+    # CLI parser: baseline, candidate, and dataset are required; model, region, and output have defaults.
     parser = argparse.ArgumentParser(
         description="Compare two prompt versions against a JSON evaluation dataset."
     )
@@ -70,7 +70,7 @@ def read_text(path: str) -> str:
 
 
 def load_dataset(path: str) -> list[dict[str, str]]:
-    # Validation stricte : tableau non vide, lignes objet avec input/expected non vides.
+    # Strict validation: non-empty list of objects containing non-empty input and expected keys.
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, list) or not data:
         raise ValueError("Dataset must be a non-empty JSON array.")
@@ -90,7 +90,7 @@ def load_dataset(path: str) -> list[dict[str, str]]:
 
 
 def normalize_text(value: str) -> list[str]:
-    # Normalisation : on ne garde que les alphanumériques en minuscule, séparés par espaces.
+    # Normalization: lowercase alphanumeric characters only, delimited by spaces.
     normalized = "".join(ch.lower() if ch.isalnum() else " " for ch in value)
     return [token for token in normalized.split() if token]
 
@@ -117,7 +117,7 @@ def estimate_cost_usd(usage: dict[str, Any]) -> float:
 def invoke_model(
     client: Any, model_id: str, prompt: str, user_input: str
 ) -> tuple[str, dict[str, Any], float]:
-    # Construction du prompt complet puis appel converse avec inférence déterministe.
+    # Construct prompt payload and invoke Converse API with deterministic temperature.
     started_at = time.perf_counter()
     response = client.converse(
         modelId=model_id,
@@ -144,7 +144,7 @@ def invoke_model(
     output = response.get("output", {})
     message = output.get("message", {})
     content = message.get("content", [])
-    # Concaténation défensive des blocs texte.
+    # Defensive concatenation across model text content blocks.
     text = "".join(block.get("text", "") for block in content if isinstance(block, dict)).strip()
     usage = response.get("usage", {})
     return text, usage, latency_ms
@@ -198,7 +198,7 @@ def build_report(
     else:
         cost_delta_pct = f"{((candidate_cost - baseline_cost) / baseline_cost) * 100:+.1f}%"
 
-    # Recommandation = prompt avec le meilleur score moyen (égalité -> baseline).
+    # Recommendation: prompt with the highest average accuracy (tie goes to baseline).
     return {
         "model_id": args.model_id,
         "region": args.region,

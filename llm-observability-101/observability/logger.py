@@ -18,9 +18,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -33,7 +33,7 @@ def explain_aws_error(exc: ClientError) -> str:
 
 
 def redact_prompt(prompt: str) -> str:
-    # Politique conservative : on ne log jamais le prompt brut côté observabilité.
+    # Privacy-safe policy: never log raw user prompts in observability pipelines.
     return "[redacted]" if prompt else ""
 
 
@@ -45,7 +45,7 @@ def build_trace(
     output_tokens: int,
 ) -> dict:
     return {
-        # Horodatage UTC ISO pour ingestion par n'importe quel backend de logs.
+        # ISO UTC timestamp for compatibility across standard log aggregators.
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "prompt_version": prompt_version,
         "prompt_preview": redact_prompt(prompt),
@@ -57,7 +57,7 @@ def build_trace(
 
 
 def main() -> None:
-    # Exemple d'appel : on mesure la latence et on enrichit la trace avec les métadonnées AWS.
+    # Sample call: measure invocation latency and enrich trace with AWS metadata.
     prompt = "Donne moi une synthese finance"
     client = boto3.client("bedrock-runtime", region_name="eu-west-1")
     started_at = perf_counter()
@@ -69,7 +69,7 @@ def main() -> None:
     trace = build_trace("v1", prompt, latency_ms, 321, 118)
     trace["request_id"] = response["ResponseMetadata"]["RequestId"]
     trace["stop_reason"] = response.get("stopReason")
-    # Sérialisation pour exploitation par la UI de formation.
+    # Serialize audit log for consumption by the training UI.
     Path("observability/bedrock-trace.json").write_text(
         json.dumps(trace, indent=2),
         encoding="utf-8",

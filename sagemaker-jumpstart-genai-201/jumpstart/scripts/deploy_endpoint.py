@@ -31,7 +31,7 @@ AWS_ERROR_HINTS = {
     "ResourceLimitExceeded": "Quota d'instances atteint pour ce type : demandez une augmentation ou choisissez une instance plus petite.",
     "ResourceNotFound": "Modèle ou endpoint introuvable : vérifiez l'identifiant et la région.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Requête refusée : un paramètre est invalide, relisez le message ci-dessous.",
+    "ValidationException": "Request validation error: verify parameter format in details below.",
 }
 
 
@@ -76,7 +76,7 @@ def wait_in_service(sagemaker, endpoint_name: str) -> dict:
 
 
 def deploy(model: dict, instance: str, endpoint_name: str) -> dict:
-    # Import tardif : la SDK sagemaker n'est nécessaire qu'en déploiement réel.
+    # Lazy import: SageMaker SDK is only required when live deployment is requested.
     from sagemaker.jumpstart.model import JumpStartModel
 
     started = time.perf_counter()
@@ -105,7 +105,7 @@ def main() -> None:
         "license": model["license"],
         "endpointName": endpoint_name,
         "dryRun": not will_deploy,
-        # Rappelés même en dry-run : un endpoint oublié se facture à l'heure.
+        # Always logged: an orphaned SageMaker endpoint incurs hourly charges.
         "teardownSteps": [
             f"aws sagemaker delete-endpoint --endpoint-name {endpoint_name} --region {AWS_REGION}",
             f"aws sagemaker delete-endpoint-config --endpoint-config-name {endpoint_name} --region {AWS_REGION}",

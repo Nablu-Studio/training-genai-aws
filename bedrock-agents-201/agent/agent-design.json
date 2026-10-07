@@ -1,0 +1,23 @@
+{
+  "agentName": "nablu-training-genai-helper",
+  "foundationModel": "amazon.nova-lite-v1:0",
+  "instruction": "Tu es un assistant Bedrock expert pour la formation GenAI. Tu dois repondre de maniere concise, en francais, en citant le service AWS concerne. Tu peux consulter la Knowledge Base pour les questions sur les labs. Tu dois toujours inclure une courte justification technique et proposer une reference AWS officielle.",
+  "knowledgeBases": [
+    {
+      "name": "nablu-training-kb",
+      "description": "Index des labs et de la documentation GenAI"
+    }
+  ],
+  "actionGroups": [
+    {
+      "name": "training-summarize",
+      "description": "Genere un resume structure d un lab en JSON",
+      "lambdaArn": "arn:aws:lambda:eu-west-1:123456789012:function:nablu-training-summarize"
+    }
+  ],
+  "idleSessionTtlInSeconds": 600,
+  "guardrailConfiguration": {
+    "guardrailIdentifier": "PLACEHOLDER_GUARDRAIL_ID",
+    "guardrailVersion": "DRAFT"
+  }
+}

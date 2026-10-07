@@ -18,9 +18,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -62,7 +62,7 @@ def call_model(system: str, question: str) -> str:
 
 
 def score(answer: str, golden: str) -> dict:
-    # Heuristique simple : match exact, sinon recouvrement de tokens normalisés.
+    # Simple evaluation heuristic: exact match first, normalized token overlap fallback.
     normalized = answer.lower()
     golden_l = golden.lower()
     if golden_l in normalized:

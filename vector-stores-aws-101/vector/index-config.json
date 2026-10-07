@@ -1,0 +1,6 @@
+{
+  "partitionStrategy": "tenant_namespace",
+  "retentionDays": 90,
+  "embeddingModel": "amazon.titan-embed-text-v2:0",
+  "rebuildStrategy": "export_and_reindex"
+}

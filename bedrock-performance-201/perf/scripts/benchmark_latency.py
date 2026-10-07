@@ -19,9 +19,9 @@ from botocore.exceptions import ClientError, EndpointConnectionError, NoCredenti
 AWS_ERROR_HINTS = {
     "AccessDeniedException": "Access denied: either the IAM policy lacks bedrock:InvokeModel, or model access is not enabled (Bedrock console > Model access).",
     "ModelTimeoutException": "Model timed out: reduce prompt size or max tokens.",
-    "ResourceNotFoundException": "Ressource introuvable dans cette région : tous les modèles ne sont pas disponibles partout.",
+    "ResourceNotFoundException": "Resource not found in this region: not all models are available in all regions.",
     "ThrottlingException": "Quota exceeded: reduce call rate or retry with exponential backoff.",
-    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile./us./global.) plutôt que l'ID direct.",
+    "ValidationException": "Request validation error: invalid model ID or model requires an inference profile ARN.",
 }
 
 
@@ -39,9 +39,9 @@ ITERATIONS = int(os.environ.get("TRAINING_PERF_ITERATIONS", "10"))
 OUTPUT_PATH = Path("perf/audit/latency-audit.json")
 
 SYSTEM_PROMPT = (
-    "Tu es un assistant AWS GenAI expert. Reponds en francais, de maniere concise, "
-    "en citant le service AWS concerne. Tu dois toujours inclure une breve justification technique. "
-    "Contexte metier detaille pour porter le system prompt au dessus du seuil de cache Bedrock : "
+    "You are an expert AWS GenAI assistant. Answer concisely in English, "
+    "citing the relevant AWS service. Always include a brief technical rationale. "
+    "Detailed business context to bring the system prompt above the Bedrock cache threshold: "
     + " ".join(f"mot{i}" for i in range(1200))
 )
 
@@ -72,7 +72,7 @@ def percentile(values: list[float], p: float) -> float:
 
 
 def main() -> None:
-    # Warmup avant chaque série pour neutraliser l'overhead du 1er appel.
+    # Warmup call before each run series to neutralize cold-start overhead.
     call_once(False, "warmup")
     no_cache: list[float] = []
     no_cache_usage: list[dict] = []
